@@ -21,7 +21,7 @@ class Login_Oa():
 
     def login(self, username, password):
         url = "http://oa.shunwang.com/doLogin.do"         ## 可换成你想登录站点的url
-        data = {"username":username,"password":password}  ##登陆用户名和密码
+        data = {"username":username,"password":password}  
         post_data = urllib.urlencode(data)
         req = urllib2.Request(url, post_data)
         try:
