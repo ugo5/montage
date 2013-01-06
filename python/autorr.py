@@ -3,7 +3,7 @@
 import urllib2
 import urllib
 import cookielib
-data={"email":"zjax-005@163.com","password":"Wc85010818"}  #登陆用户名和密码
+data={"email":"email","password":"passpord"}  #登陆用户名和密码
 post_data=urllib.urlencode(data)
 
 cj=cookielib.CookieJar()
