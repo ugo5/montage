@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-# @文件名(file): autoswoa.py
+# @文件名(file): autologin.py
 # @作者(author): uchen
 # @邮箱(mail): zjax-005@163.com
+# @微博(weibo): http://weibo.com/stophw
 # @时间(date): 2013-01-05
 
 import urllib2
@@ -30,7 +31,7 @@ def set_cmd_color(color, handle=std_out_handle):
 def reset_color():  
     set_cmd_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE)
 
-def print_color_text(print_text):
+def print_red_text(print_text):
     set_cmd_color(FOREGROUND_RED |FOREGROUND_INTENSITY)
     print print_text
     reset_color()
@@ -43,8 +44,8 @@ class Login_Oa():
         self.opener.addheaders = [("User-agent", "Mozilla/4.0 (compatible); MSIE 6.0; Windows NT 5.1")]
 
     def login(self, username, password):
-        url = "http://oa.shunwang.com/doLogin.do"
-        data = {"username":username,"password":password}  ##登陆用户名和密码
+        url = "http://oa.shunwang.com/doLogin.do"         ## 可换成你想登录站点的url
+        data = {"username":username,"password":password} 
         post_data = urllib.urlencode(data)
         req = urllib2.Request(url, post_data)
         try:
@@ -52,7 +53,7 @@ class Login_Oa():
         except Exception, e:
             print(u'网络连接错误！')
             return False
-        login_js = json.loads(content.read())    ##返回字符串
+        login_js = json.loads(content.read())    ## 转换json为python的字典
         if login_js["result"] != "success":
             print u"用户名密码不匹配！"
             return False
@@ -61,7 +62,7 @@ class Login_Oa():
         return True
 
     def logout(self):
-        url = "http://oa.shunwang.com/loginout.do"
+        url = "http://oa.shunwang.com/loginout.do"       ## 可换成你需要退出站点的url
         req = urllib2.Request(url)
         html = self.opener.open(req)
         html.close()
@@ -83,13 +84,10 @@ class Login_Oa():
         req = urllib2.Request(url)
         html = self.opener.open(req)
         checkpunch_js = json.loads(html.read())
-        print check_date
         valid_date = [item for item in check_date if item in checkpunch_js.keys()]   ##取得两个列表的交集
-        print valid_date
         for query_date in valid_date:
             print u"\n------------华丽丽的分割线------------"
             if not checkpunch_js[query_date]["infos"]:
-                #print u"------------华丽丽的分割线------------"
                 print u"考勤日期: %s %s \n考勤人: %s\n考勤状态: %s\n\n第一次打卡时间: %s:%s\n早上打卡时间: %s:%s\n最后一次打卡时间: %s:%s\n下午打卡时间: %s:%s" % (query_date.split()[0],\
                                            checkpunch_js[query_date]["record"]["recordweekday"],\
                                            checkpunch_js[query_date]["record"]["realName"],\
@@ -104,11 +102,11 @@ class Login_Oa():
                                            checkpunch_js[query_date]["record"]["afternoonPunch"]["minutes"])
             else:
                 if os.name == 'nt':
-                    print_color_text(u'！！！ 次奥~考勤有异常 ！！！') 
+                    print_red_text(u'！！！ 次奥~考勤有异常 ！！！') 
                     print u"\n考勤日期: %s %s \n考勤人: %s\n\n异常原因:->" % (query_date.split()[0],\
                                                                            checkpunch_js[query_date]["record"]["recordweekday"],\
                                                                            checkpunch_js[query_date]["record"]["realName"]),
-                    print_color_text('%s' % checkpunch_js[query_date]["infos"][0]["reason"])
+                    print_red_text('%s' % checkpunch_js[query_date]["infos"][0]["reason"])                  ## 异常原因显示红色
 
                 else:
                     print u"\033[1;31;40m！！！次奥~考勤有异常！！！\033[0m\n考勤日期: %s %s \n考勤人: %s\n\n异常原因:-> %s" % (query_date.split()[0],\
