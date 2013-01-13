@@ -1,0 +1,394 @@
+" vim:foldmethod=marker
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General                                             {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+source ~/.vim/bundles.vim
+" source ~/.vim/bundle/vundle/autoload/conque_term.vim
+behave mswin
+
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim(gvim) Fileformat & encoding & language          {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fonts setting         
+if has("win32") || has("win64")
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h10.5,DejaVu\ Sans\ Mono:h12,Menlo\ Regular\ for\ Powerline:h12,Monaco:h13 "use DejaVu Sans Mono for english on win/liunux, Monaco for mac
+    "set guifont=Consolas:h11
+    "set guifont=Courier_New:h12:cANSI
+    set guifontwide=NSimsun:h12.5
+else
+    set guifont=Monospace\ 12
+    " set guifontwide=文泉驿等宽微米黑\ 13.5
+endif
+
+" Visual setting       
+"set fileencodings=utf-8,cp936,big5,euc-jp,euc-kr,latin1,ucs-bom
+set fileencodings=utf-8,gbk2312,gbk
+set termencoding=utf-8
+set go="无菜单、工具栏"
+
+" Set statusbar unknow character in chinese 
+set langmenu=zh_CN
+let $LANG = 'zh_CN.UTF-8'
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+"不显示捐赠提示
+set shortmess=atl
+
+" ColorScheme
+colorscheme badwolf
+
+" Set syntax highlight
+syntax on
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim general shortcuts setting                       {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autochdir       "change directory to current window auto
+set autoread        "read open files again when changed outside vim
+set backspace=2
+set cmdheight=1     "highlight commandline
+set colorcolumn=+1
+au WinLeave * set nocursorline nocursorcolumn
+au WinEnter * set cursorline cursorcolumn
+set cursorline      "highlight cursorline
+" set cursorcolumn    "highlight cursorcolumn
+set lines=40 columns=140
+set mouse=a         "enable mouse
+set magic           "enable magic matching
+set nu              "set display number
+set paste           "allow pasting text
+set ru              "set ruler
+set scrolloff=3     "auto scroll when cursor with 5 rows from boundary of the window
+set sm              "smart match
+set showmode
+set showcmd
+set wildmenu        "use menu for command line completion
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" text options setting(Tab & spaces keys)             {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set softtabstop=4   "delete Tab ,delete 4 spaces
+set shiftwidth=4    "set << and >> shift 4 spaces
+set smarttab        "beginning of the line , according to 'shiftwidth' insert a blank
+set tabstop=4       "press tab , jump 4 speces
+set textwidth=500
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Files and backups and undo                          {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set undofile        "open undo file
+if has('win32') || has('win32')
+   set undodir=D:\\Program\ Files\\Vim\\vimfiles\\undo
+else
+   set undodir=/home/.vim/undo
+endif
+set nobackup        "no backup file(~file)
+set noswapfile      "no swap file 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Indent                                             {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autoindent      "auto indent
+set smartindent     "smart cindent
+set wrap            "Wrap lines
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tabbar setting                                      {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" sei showtabline=2   "open gvim with tab tag
+" set title           "show file in titlebar
+
+" sharkwang's tabbar
+" set tabline=%!MyTabLine()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim general mapping shortcuts                       {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = ','
+let g:mapleader = ','
+
+" netrw setting
+" let g:netrw_altv = 1
+" let g:netrw_winsize = 30
+" nmap <leader>fe :Sexplore!<cr>
+
+" Tab configuration
+map <leader>fn :tabnew<cr>
+map <leader>tp :tabnew %<cr>
+map <leader>tc :tabclose<cr>
+map <leader>to :tabo<cr>
+map <leader>tf :tabf<cr>        "tabfind in current dir
+map <leader>tm :tabmove
+map <leader>tp :tabp<cr>
+map <leader>tn :tabn<cr>
+map <leader>d :bdelete 
+map <leader>l :ls 
+
+" Ctrl-c in Visual mode when mouse selected
+vmap <C-C> "+y
+
+" open tab configuration
+map <leader>o :open 
+map <leader>t :tabnew 
+
+" fast edit、save、quit
+map <Leader>e :e 
+map <Leader>q :q!<cr>
+map <Leader>w :w<cr>
+
+" auto syspath completment
+:inoremap <leader>f <C-x><C-f>
+
+" add a blank line, don't enter Insert Model
+noremap oo o<esc>
+
+" fast modify, load the configuration _vimrc file
+if has('win32')
+    map <leader>es :e! $HOME/_vimrc<cr>
+    map <leader>s :source $HOME/_vimrc<cr>
+else
+    map <leader>es :e! ~/.vimrc<cr>
+    map <leader>s :source ~/.vimrc<cr>
+endif
+
+" Press F11 for fullscreen
+if has('gui_running') && has("win32")
+    map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
+    "au GUIEnter * simalt ~x            "maximize when launch gvim
+endif
+
+"when open file with vim ,back to the last cursor position
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+" fast swithing splits window
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-H> <C-W>h
+map <C-L> <C-W>l
+
+" adjust the split size
+nmap <A-h> <C-w><
+nmap <A-l> <C-w>>
+nmap <A-k> <C-w>+
+nmap <A-j> <C-w>-
+
+" You want to be part of the gurus? Time to get in serious stuff and stop using
+" arrow keys.
+noremap <left> <nop>
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <right> <nop>
+
+" Splits ,v and ,h to fast open new splits (vertical and horizontal)
+nnoremap <leader>v <C-w>v<C-w>l
+nnoremap <leader>h <C-w>s<C-w>j
+
+" Auto complete brackets() , including braces{}
+:inoremap ' ''<ESC>i
+:inoremap " ""<ESC>i
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {}<ESC>i
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap < <><ESC>i
+:inoremap > <c-r>=ClosePair('>')<CR>
+
+func! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endf
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim for Ide plugin                                  {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" AuthorInfo
+let g:vimrc_author='uchen'
+let g:vimrc_email='zjax-005@163.com'
+let g:vimrc_homepage='http://weibo.com/stophw'
+nmap <F2> :AuthorInfoDetect<cr>
+
+" easy-motion
+let g:EasyMotion_leader_key = '<Leader><Leader>'
+
+" NeoComplCache
+let g:neocomplcache_enable_at_startup=1
+let g:neoComplcache_disableautocomplete=1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_smart_case=1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+set completeopt-=preview
+
+imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+
+" powerline
+set laststatus=2
+set t_Co=256
+let g:Powerline_symbols = 'fancy'
+let Powerline_symbols = 'compatible'
+set encoding=utf8
+" set encoding=prc
+
+" Enable omni completion
+autocmd FileType php setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
+autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
+autocmd FileType coffee,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
+autocmd FileType html,htmldjango,xhtml,haml setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=0
+autocmd FileType sass,scss,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
+
+" tabbar
+let g:Tb_MaxSize = 2
+let g:Tb_TabWrap = 1
+hi Tb_Normal guifg=white ctermfg=white
+hi Tb_Changed guifg=green ctermfg=green
+hi Tb_VisibleNormal ctermbg=252 ctermfg=235
+hi Tb_VisibleChanged guifg=green ctermbg=252 ctermfg=white
+
+" Tagbar
+let g:tagbar_left=1
+let g:tagbar_width=26
+let g:tagbar_autofocus = 1
+let g:tagbar_sort = 0
+let g:tagbar_compact = 1
+
+" Nerd Tree -- Data Explorer file directory 
+let NERDChristmasTree=0
+let NERDTreeWinSize=28
+let NERDTreeChDirMode=2
+let NERDTreeIgnore=['\.vim$', '\~$', '\.pyc$', '\.swp$']
+let NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\~$']
+let NERDTreeShowBookmarks=1
+let NERDTreeWinPos = "right"
+
+" SuperTab
+"let g:SuperTabDefultCompletionType='context'
+let g:SuperTabDefaultCompletionType = '<C-X><C-U>'
+let g:SuperTabRetainCompletionType=2
+
+" Minibufexplorer
+" let g:miniBufExplMapWindowNavVim = 1
+
+" ctrlp -- Quick Search to open the file
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,.DS_Store " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe              " Windows
+let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+
+" NERDcommenter
+let NERDSpaceDelims=1
+let NERDCompactSexyComs=1
+
+" Keybindings for plugin toggle
+nmap <F4> :TagbarToggle<cr>
+nmap <F6> :NERDTreeToggle<cr>
+nmap <F3> :GundoToggle<cr>
+nmap <leader>i :IndentGuidesToggle<cr>
+nnoremap <leader>a :Ack
+nnoremap <leader>V V`]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Python setting in here                              {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" pydoc setting
+let g:pydoc_cmd='D:\Python27\Lib\pydoc.py'
+
+" shift+e to excute the python script"
+map <F5> :w<cr>:!python.exe %<cr>
+
+" run python script in vim"
+map <leader>p :ConqueTermVSplit python <c-r>=expand("%:t")<cr><cr>
+
+""实现+-*/前后自动添加空格，逗号后面自动添加空格，适用python
+"支持+= -+ *= /+格式
+au FileType python inoremap <buffer>= <c-r>=EqualSign('=')<CR>
+au FileType python inoremap <buffer>+ <c-r>=EqualSign('+')<CR>
+au FileType python inoremap <buffer>- <c-r>=EqualSign('-')<CR>
+au FileType python inoremap <buffer>* <c-r>=EqualSign('*')<CR>
+au FileType python inoremap <buffer>/ <c-r>=EqualSign('/')<CR>
+au FileType python inoremap <buffer>> <c-r>=EqualSign('>')<CR>
+au FileType python inoremap <buffer>< <c-r>=EqualSign('<')<CR>
+au FileType python inoremap <buffer>: <c-r>=Swap()<CR>
+au FileType python inoremap <buffer>, ,<space>
+
+function! EqualSign(char)
+    if a:char  =~ '='  && getline('.') =~ ".*("
+        return a:char
+    endif
+    let ex1 = getline('.')[col('.') - 3]
+    let ex2 = getline('.')[col('.') - 2]
+    if ex1 =~ "[-=+><>\/\*]"
+        if ex2 !~ "\s"
+            return "\<ESC>i".a:char."\<SPACE>"
+        else
+            return "\<ESC>xa".a:char."\<SPACE>"
+        endif
+    else
+        if ex2 !~ "\s"
+            return "\<SPACE>".a:char."\<SPACE>\<ESC>a"
+        else
+            return a:char."\<SPACE>\<ESC>a"
+        endif
+    endif
+endfunction
+
+"实现光标位置自动交换:) -->  ):
+function! Swap()
+    if getline('.')[col('.') - 1] =~ ")"
+        return "\<ESC>la:"
+    else
+        return ":"
+    endif
+endf
+"""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
+
