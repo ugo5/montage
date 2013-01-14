@@ -254,6 +254,8 @@ nmap <F2> :AuthorInfoDetect<cr>
 
 " easy-motion
 let g:EasyMotion_leader_key = '<Leader><Leader>'
+let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+let g:EasyMotion_do_shade = 0 
 
 " NeoComplCache
 let g:neocomplcache_enable_at_startup=1
@@ -310,6 +312,7 @@ let NERDTreeIgnore=['\.vim$', '\~$', '\.pyc$', '\.swp$']
 let NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\~$']
 let NERDTreeShowBookmarks=1
 let NERDTreeWinPos = "right"
+nmap <leader>nt  :NERDTree 
 
 " SuperTab
 "let g:SuperTabDefultCompletionType='context'
@@ -343,11 +346,11 @@ nnoremap <leader>V V`]
 " pydoc setting
 let g:pydoc_cmd='D:\Python27\Lib\pydoc.py'
 
-" shift+e to excute the python script"
+" <F5> to excute the python script"
 map <F5> :w<cr>:!python.exe %<cr>
 
-" run python script in vim"
-map <leader>p :ConqueTermVSplit python <c-r>=expand("%:t")<cr><cr>
+" conque plugin for running python script in vim"
+" map <leader>p :ConqueTermVSplit python <c-r>=expand("%:t")<cr><cr>
 
 ""实现+-*/前后自动添加空格，逗号后面自动添加空格，适用python
 "支持+= -+ *= /+格式
@@ -355,7 +358,7 @@ au FileType python inoremap <buffer>= <c-r>=EqualSign('=')<CR>
 au FileType python inoremap <buffer>+ <c-r>=EqualSign('+')<CR>
 au FileType python inoremap <buffer>- <c-r>=EqualSign('-')<CR>
 au FileType python inoremap <buffer>* <c-r>=EqualSign('*')<CR>
-au FileType python inoremap <buffer>/ <c-r>=EqualSign('/')<CR>
+" au FileType python inoremap <buffer>/ <c-r>=EqualSign('/')<CR>
 au FileType python inoremap <buffer>> <c-r>=EqualSign('>')<CR>
 au FileType python inoremap <buffer>< <c-r>=EqualSign('<')<CR>
 au FileType python inoremap <buffer>: <c-r>=Swap()<CR>

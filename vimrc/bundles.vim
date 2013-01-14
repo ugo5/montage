@@ -64,6 +64,7 @@ Bundle 'musiczone/TabBar'
 "--------------
 Bundle "georgexsh/pyflakes-vim"
 Bundle "fs111/pydoc.vim"
+Bundle "python_ifold"
 
 " vim-scripts repos  （vim-scripts仓库里的，按下面格式填写）
 ""Bundle 'lucius'
